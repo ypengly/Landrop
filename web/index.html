@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LANdrop — Local file sharing</title>
+<link rel="stylesheet" href="/static/style.css" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦀</text></svg>" />
+</head>
+<body>
+
+  <!-- PIN gate: shown only when the server requires a PIN -->
+  <div id="pin-gate" class="pin-gate hidden">
+    <form id="pin-form" class="pin-card" autocomplete="off">
+      <div class="pin-card__logo">🦀 LANdrop</div>
+      <p class="pin-card__hint">This device is PIN-protected. Enter the PIN to continue.</p>
+      <input id="pin-input" class="pin-input" type="password" inputmode="numeric" pattern="[0-9]*"
+             placeholder="••••" maxlength="8" autofocus />
+      <button type="submit" class="btn btn--primary">Unlock</button>
+      <p id="pin-error" class="pin-error hidden">Incorrect PIN. Try again.</p>
+    </form>
+  </div>
+
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <div class="topbar__brand">
+        <span class="topbar__logo">🦀</span>
+        <span class="topbar__title">LANdrop</span>
+      </div>
+      <div class="topbar__actions">
+        <span id="status-pill" class="status-pill">
+          <span class="status-pill__dot"></span>
+          <span id="status-pill__text">Connecting…</span>
+        </span>
+        <button id="theme-toggle" class="icon-btn" title="Toggle dark / light mode" aria-label="Toggle theme">
+          <svg id="theme-icon" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 4a1 1 0 011 1v1a1 1 0 11-2 0V5a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm8-6a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM6 12a1 1 0 01-1 1H4a1 1 0 110-2h1a1 1 0 011 1zm11.657 5.657a1 1 0 01-1.414 0l-.707-.707a1 1 0 111.414-1.414l.707.707a1 1 0 010 1.414zM7.05 7.05a1 1 0 01-1.414 0l-.707-.707A1 1 0 116.343 4.93l.707.707a1 1 0 010 1.414zm10.607-2.121a1 1 0 010 1.414l-.707.707A1 1 0 1115.536 5.64l.707-.707a1 1 0 011.414 0zM7.05 16.95a1 1 0 010 1.414l-.707.707A1 1 0 114.93 17.657l.707-.707a1 1 0 011.414 0zM12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- Connection card -->
+      <section class="card connect-card">
+        <h2 class="card__title">Scan to connect</h2>
+        <div class="connect-card__body">
+          <img id="qr-image" class="qr-image" alt="QR code for this LANdrop instance" />
+          <div class="connect-card__info">
+            <div class="connect-card__url" id="connect-url">—</div>
+            <p class="connect-card__hint">Open this address on another device on the same network, or scan the code.</p>
+            <p class="connect-card__warning">⚠️ LANdrop is intended for trusted local networks only.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Send / receive area -->
+      <section class="card upload-card">
+        <h2 class="card__title">Send a file</h2>
+        <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Drag and drop files here or click to select">
+          <div class="dropzone__icon">📤</div>
+          <p class="dropzone__text">Drag files here, or <span class="dropzone__link">browse</span></p>
+          <p class="dropzone__subtext">Files are shared directly with anyone connected to this LANdrop instance.</p>
+        </div>
+        <input id="file-input" type="file" multiple hidden />
+        <div id="upload-list" class="transfer-list"></div>
+      </section>
+
+      <!-- Incoming files awaiting accept/reject -->
+      <section id="incoming-section" class="card incoming-card hidden">
+        <h2 class="card__title">Incoming files</h2>
+        <div id="incoming-list" class="incoming-list"></div>
+      </section>
+
+      <!-- Connected devices -->
+      <section class="card devices-card">
+        <h2 class="card__title">Connected devices</h2>
+        <div id="devices-list" class="devices-list">
+          <p class="empty-state">No other devices discovered yet.</p>
+        </div>
+      </section>
+
+      <!-- History -->
+      <section class="card history-card">
+        <h2 class="card__title">Recent transfers</h2>
+        <div id="history-list" class="history-list">
+          <p class="empty-state">No transfers yet. Drag a file in to get started.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

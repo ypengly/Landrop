@@ -1,0 +1,64 @@
+[package]
+name = "landrop"
+version = "0.1.0"
+edition = "2021"
+description = "A local-first, privacy-focused LAN file sharing application"
+license = "MIT"
+readme = "README.md"
+
+[lib]
+name = "landrop"
+path = "src/lib.rs"
+
+[[bin]]
+name = "landrop"
+path = "src/main.rs"
+
+[dependencies]
+# Web framework / async runtime
+axum = { version = "0.7", features = ["ws", "multipart", "macros"] }
+tokio = { version = "1", features = ["full"] }
+tower = { version = "0.4", features = ["util"] }
+tower-http = { version = "0.5", features = ["fs", "cors", "trace", "limit"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# IDs, time
+uuid = { version = "1", features = ["v4", "serde"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+# CLI
+clap = { version = "4", features = ["derive"] }
+
+# QR code + local IP
+qrcode = { version = "0.14", default-features = false, features = ["svg"] }
+local-ip-address = "0.6"
+
+# Security / auth
+rand = "0.8"
+sha2 = "0.10"
+
+# Errors
+thiserror = "1"
+anyhow = "1"
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Misc
+futures-util = "0.3"
+sanitize-filename = "0.5"
+hostname = "0.4"
+tokio-util = { version = "0.7", features = ["io"] }
+
+[dev-dependencies]
+tempfile = "3"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
